@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.cdk.global.assignment;
 
@@ -30,39 +30,41 @@ public class PaycheckConsumerApplication {
 	public static void main(String[] args) throws Exception{
 		SpringApplication.run(PaycheckConsumerApplication.class, args);
 		log.info("PaycheckConsumerApplication Started...");
+        log.info("Loading Paycheck Bulk Request");
 		runPayCheckBulkClient();
+        log.info("Loading Paycheck Request");
 		runPayCheckClient();
 	}
-	
+
 	public static void runPayCheckBulkClient() throws Exception {
-		
+
 		String uri = "http://localhost:8080/payslip/bulkupload";
 		RestTemplate restTemplate = new RestTemplate();
-		
+
 		String result = restTemplate.postForObject(uri, getBulkRequest(), String.class);
-		
-		log.info(result);		
+
+		log.info(result);
 	}
-	
+
 	public static void runPayCheckClient() throws Exception {
 		String uri = "http://localhost:8080/payslip";
-		
+
 		RestTemplate restTemplate = new RestTemplate();
-		
+
 		String result = restTemplate.postForObject(uri, getEmployeeData(), String.class);
-		log.info(result);		
+		log.info(result);
 	}
-	
+
 	private static PayCheckBulkRequest getBulkRequest(){
 		String csvFile = System.getProperty("user.home") + "/paychecks/employees.csv";
 		List<EmployeeData> employeeDataList = CSVUtil.readCsv(csvFile);
 
 		PayCheckBulkRequest payCheckBulkRequest = new PayCheckBulkRequest();
 		payCheckBulkRequest.setEmployeeDataList(employeeDataList);
-		
+
 		return payCheckBulkRequest;
 	}
-	
+
 	private static EmployeeData getEmployeeData(){
     	EmployeeData employeeData = new EmployeeData();
     	employeeData.setEmployeeName("Jane Diaz");
@@ -70,7 +72,7 @@ public class PaycheckConsumerApplication {
     	employeeData.setPayRate(12.34);
     	employeeData.setStateCode("NV");
     	employeeData.setDependentCount(3);
-    	
+
     	return employeeData;
     }
 }
